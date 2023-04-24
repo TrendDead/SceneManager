@@ -11,6 +11,9 @@ namespace UnityDev
     /// </summary>
     public class SceneManager : EditorWindow
     {
+        public Vector2 scrollPosition = Vector2.zero;
+        private SceneManager newWindow;
+
         [MenuItem("UnityDev/Scene Manager/Creating scene manager window")]
         public static void CreatingWindow()
         {
@@ -25,9 +28,12 @@ namespace UnityDev
                     .ToArray();
 
             var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
-        
+
+            scrollPosition = GUI.BeginScrollView(new Rect(0, 0, Screen.width, Screen.height), scrollPosition, new Rect(0, 0, 0, 23f * scenePaths.Length));
+
             for (int i = 0; i < scenePaths.Length; i++)
             {
+
 
                 GUILayout.BeginHorizontal();
 
@@ -41,7 +47,7 @@ namespace UnityDev
                 }
 
                 // нопка выбора отдельной сцены
-                if (GUILayout.Button(Path.GetFileNameWithoutExtension(scenePaths[i])))
+                if (GUILayout.Button(Path.GetFileNameWithoutExtension(scenePaths[i]), GUILayout.Width(Screen.width / 2 - 10), GUILayout.Height(20)))
                 {
                     foreach (var path in scenePaths)
                     {
@@ -60,7 +66,7 @@ namespace UnityDev
                 }
 
                 // нопка совместного открыти€ сцен
-                if (GUILayout.Button("Additive"))
+                if (GUILayout.Button("Additive", GUILayout.Width(Screen.width / 2 - 10), GUILayout.Height(20)))
                 {
                     if (EditorSceneManager.GetSceneByPath(scenePaths[i]).name == null)
                     {
@@ -74,7 +80,10 @@ namespace UnityDev
                 }
 
                 GUILayout.EndHorizontal();
+
             }
+
+            GUI.EndScrollView();
         }
     }
 }
